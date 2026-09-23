@@ -1,0 +1,616 @@
+/* ---------------------------------------------------------------------------
+ * Variant PDP styles.
+ *
+ * Plain CSS, no framework: seven components do not justify a styling dependency, and
+ * the assessment asks not to overbuild.
+ *
+ * Two rules are load-bearing rather than cosmetic. Focus outlines are never removed --
+ * a keyboard user has to be able to see where they are. And every disabled or
+ * out-of-stock state is conveyed by text as well as by colour, so it survives colour
+ * blindness and greyscale printing.
+ * ------------------------------------------------------------------------- */
+
+:root {
+  --bg: #faf9f7;
+  --surface: #ffffff;
+  --border: #e5e2dd;
+  --border-strong: #c9c4bd;
+  --text: #1f1c19;
+  --muted: #6b6560;
+  --focus: #2563eb;
+  --danger: #9b2c2c;
+  --danger-bg: #fdf3f3;
+  --success: #276749;
+  --success-bg: #f0f7f2;
+  --info-bg: #f4f2ef;
+  --radius: 10px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* --- shell ---------------------------------------------------------------- */
+
+.app {
+  min-height: 100vh;
+}
+
+.app__header {
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.app__brand {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.app__main {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 24px 20px 64px;
+}
+
+/* --- page layout ---------------------------------------------------------- */
+
+.pdp {
+  display: grid;
+  gap: 32px;
+}
+
+.pdp__main {
+  display: grid;
+  gap: 24px;
+}
+
+.pdp__buy {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+}
+
+.pdp__options {
+  display: grid;
+  gap: 20px;
+}
+
+.pdp__note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.pdp__refresh {
+  justify-self: start;
+  padding: 8px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.pdp__refresh:hover {
+  background: var(--info-bg);
+}
+
+@media (min-width: 900px) {
+  .pdp__main {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 48px;
+    align-items: start;
+  }
+}
+
+/* --- gallery -------------------------------------------------------------- */
+
+.gallery {
+  margin: 0;
+}
+
+.gallery__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+/* --- product info --------------------------------------------------------- */
+
+.info {
+  display: grid;
+  gap: 10px;
+}
+
+.info__name {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.info__description {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.info__price {
+  margin: 4px 0 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.info__prompt {
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.info__stock {
+  margin: 0;
+  font-size: 14px;
+  color: var(--success);
+}
+
+.info__stock--out {
+  color: var(--danger);
+}
+
+/* --- option selector ------------------------------------------------------ */
+
+.option {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.option__legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.option__values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.option__value {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.option__value:hover {
+  border-color: var(--border-strong);
+}
+
+.option__value--selected {
+  border-color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--text);
+}
+
+/* Dashed rather than faded: a shopper can still pick it, and the note explains why
+   the add-to-cart button refuses. */
+.option__value--out_of_stock {
+  border-style: dashed;
+}
+
+.option__value--impossible {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.option__value--impossible .option__label {
+  text-decoration: line-through;
+}
+
+/* The radio itself is visually hidden but stays keyboard-focusable, so the focus ring
+   has to be drawn on the label. */
+.option__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.option__value:has(.option__input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.option__swatch {
+  width: 16px;
+  height: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  border-radius: 50%;
+}
+
+.option__note {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* --- quantity ------------------------------------------------------------- */
+
+.quantity {
+  display: grid;
+  gap: 8px;
+}
+
+.quantity__label {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.quantity__controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+  width: fit-content;
+}
+
+.quantity__button {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.quantity__button:hover:not(:disabled) {
+  background: var(--info-bg);
+}
+
+.quantity__button:disabled {
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+.quantity__input {
+  width: 56px;
+  height: 40px;
+  border: 0;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  text-align: center;
+  font: inherit;
+  color: var(--text);
+  background: transparent;
+}
+
+.quantity__hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* --- add to cart ---------------------------------------------------------- */
+
+.add-to-cart {
+  padding: 14px 20px;
+  border: 1px solid var(--text);
+  border-radius: var(--radius);
+  background: var(--text);
+  color: var(--surface);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+
+.add-to-cart:hover:not(:disabled) {
+  background: #3a3531;
+}
+
+.add-to-cart:disabled {
+  border-color: var(--border-strong);
+  background: #dedad5;
+  color: #78716c;
+  cursor: not-allowed;
+}
+
+/* --- live region ---------------------------------------------------------- */
+
+.status {
+  font-size: 14px;
+}
+
+/* Kept in the DOM at all times -- a live region inserted together with its message is
+   often not announced. Only its box changes here. */
+.status--visible {
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+}
+
+.status--success {
+  background: var(--success-bg);
+  border-color: #cfe4d7;
+  color: var(--success);
+}
+
+.status--info {
+  background: var(--info-bg);
+  border-color: var(--border);
+  color: var(--muted);
+}
+
+.status--error {
+  background: var(--danger-bg);
+  border-color: #f0d5d5;
+  color: var(--danger);
+}
+
+/* --- cart ----------------------------------------------------------------- */
+
+.cart {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+
+.cart__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cart__title {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.cart__refresh {
+  padding: 6px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.cart__refresh:hover {
+  background: var(--info-bg);
+}
+
+.cart__count {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.cart__state {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.cart__state--error {
+  color: var(--danger);
+}
+
+.cart__lines {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.cart__line {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.cart__thumb {
+  width: 40px;
+  height: 48px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--info-bg);
+  object-fit: cover;
+}
+
+.cart__line-name {
+  min-width: 0;
+}
+
+.cart__line-quantity {
+  color: var(--muted);
+}
+
+.cart__line-total {
+  font-variant-numeric: tabular-nums;
+}
+
+.cart__subtotal {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-weight: 600;
+}
+
+/* --- loading and error states --------------------------------------------- */
+
+.state {
+  display: grid;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.state__skeleton {
+  display: grid;
+  gap: 24px;
+}
+
+.skeleton__stack {
+  display: grid;
+  gap: 12px;
+}
+
+.skeleton {
+  border-radius: var(--radius);
+  background: #ece9e5;
+}
+
+.skeleton--image {
+  aspect-ratio: 5 / 6;
+  border-radius: 14px;
+}
+
+.skeleton--title {
+  height: 30px;
+  width: 60%;
+}
+
+.skeleton--line {
+  height: 14px;
+  width: 100%;
+}
+
+.skeleton--short {
+  width: 45%;
+}
+
+.skeleton--price {
+  height: 24px;
+  width: 25%;
+}
+
+.state__text {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.state__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.state__hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.state__retry {
+  justify-self: start;
+  padding: 10px 18px;
+  border: 1px solid var(--text);
+  border-radius: var(--radius);
+  background: var(--text);
+  color: var(--surface);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.state--error {
+  max-width: 520px;
+  padding: 24px;
+  border: 1px solid #f0d5d5;
+  border-radius: 14px;
+  background: var(--danger-bg);
+  gap: 12px;
+}
+
+@media (min-width: 900px) {
+  .state__skeleton {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .info__name {
+    font-size: 22px;
+  }
+
+  .cart__line {
+    grid-template-columns: 40px minmax(0, 1fr) auto;
+  }
+
+  .cart__line-total {
+    grid-column: 2 / -1;
+    text-align: right;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

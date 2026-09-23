@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480" width="400" height="480" role="img" aria-label="Aurora Classic Tee in black, size S">
+  <rect width="400" height="480" fill="#f5f3f0"/>
+  <path d="M 168 76 C 180 96 220 96 232 76 L 262 86 L 322 146 L 288 180 L 256 156 L 256 402 L 144 402 L 144 156 L 112 180 L 78 146 L 138 86 Z" fill="#232323"/>
+  <path d="M 168 76 C 180 96 220 96 232 76" fill="none" stroke="#1d1d1d" stroke-width="7" stroke-linecap="round"/>
+  <path d="M 148 386 L 252 386" stroke="#1d1d1d" stroke-width="2" opacity="0.35" stroke-linecap="round"/>
+</svg>

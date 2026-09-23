@@ -1,0 +1,63 @@
+# ---------------------------------------------------------------------------
+# Variant PDP API -- backend service.
+#
+# Managed with uv (https://docs.astral.sh/uv/). This is the single config file:
+# runtime deps, the dev-only test stack, build settings and pytest options.
+#
+#   uv sync                                    # create .venv + install everything
+#   uv run uvicorn backend.main:app --reload   # serve on :8000
+#   uv run pytest                              # run the test suite
+#
+# uv.lock is committed on purpose, so `uv sync` reproduces the exact versions
+# this was developed and tested against.
+# ---------------------------------------------------------------------------
+
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Variant PDP API: catalog lookup and cart writes behind a product detail page."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115,<1.0",
+    "pydantic>=2.9,<3.0",
+    "uvicorn[standard]>=0.30,<1.0",
+]
+
+# Test-only tooling, deliberately kept out of [project.dependencies] so a
+# runtime install (`uv sync --no-dev`) does not drag pytest and httpx into the
+# deployed image.
+[dependency-groups]
+dev = [
+    "httpx>=0.27,<1.0",
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.18,<0.13.0"]
+build-backend = "uv_build"
+
+# src layout: the importable package is src/backend/, tests sit outside it.
+# Spelled out explicitly so the build backend never has to guess the module name
+# from the distribution name.
+[tool.uv.build-backend]
+module-name = "backend"
+module-root = "src"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# The service is async top to bottom, so an implicit asyncio mode keeps async
+# fixtures and tests free of per-test decorators.
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+
+# This mirror is declared because the machine this was developed on needs it; it is not
+# a requirement of the project. If your network reaches pypi.org directly, override the
+# index instead of editing this file:
+#
+#   uv sync --default-index https://pypi.org/simple
+#   UV_DEFAULT_INDEX=https://pypi.org/simple uv sync
+[[tool.uv.index]]
+url = "https://mirrors.aliyun.com/pypi/simple/"
+default = true
